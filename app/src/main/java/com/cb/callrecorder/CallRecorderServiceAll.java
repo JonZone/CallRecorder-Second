@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,9 @@ public class CallRecorderServiceAll extends Service {
 
     static MediaRecorder recorder;
     boolean recording, ringing, answered, outgoing;
+    static boolean ring = false;
+    static boolean callReceived = false;
+    static boolean shown = false;
 
     //Broadcast receiver for calls
     CallBroadcastReceiver cbr;
@@ -135,8 +139,21 @@ public class CallRecorderServiceAll extends Service {
 //            recorder.setAudioEncodingBitRate(16);
 //            recorder.setAudioSamplingRate(44100);
 
-
-            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+//            if (Build.VERSION.SDK_INT ==Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//               // recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION);
+//                recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+//                Log.e("AudioSource", "VOICE_RECOGNITION");
+//            }
+//            else if (Build.VERSION.SDK_INT ==Build.VERSION_CODES.JELLY_BEAN) {
+//               // recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+//                recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+//                Log.e("AudioSource", "VOICE_MIC");}
+//            else {
+//                Log.e("AudioSource", "VOICE_CALL");
+//                //recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+//                recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+//            }
+            recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
             recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
@@ -144,11 +161,11 @@ public class CallRecorderServiceAll extends Service {
             recorder.setOutputFile(audiofile.getAbsolutePath());
             recorder.prepare();
 
-            //  AudioManager audioManager = (AudioManager)getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-            //get the current volume set
-            //int deviceCallVol = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-            //set volume to maximum
-            //      audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0);
+            AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+            //  get the current volume set
+            int deviceCallVol = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+            //  set volume to maximum
+            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0);
             Log.e("recorder", "" + String.valueOf(recording));
 
             if (recording == false) {
@@ -184,12 +201,15 @@ public class CallRecorderServiceAll extends Service {
                 if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                     //Check to see if call was answered later
                     ringing = true;
+                    ring = true;
+                    shown = false;
 
                     phoneNumber = b.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
                     return false;
                 } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                     //call to be recorded if it was ringing or new outgoing
+                    callReceived = true;
                     if (ringing == true || outgoing == true) {
                         //ringing=false;
                         //outgoing=false;
@@ -197,7 +217,17 @@ public class CallRecorderServiceAll extends Service {
                     } else
                         return false;
                 } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                    if (ring == true && callReceived == false) {
+                        if (!shown) {
+                            Log.d("MISSED", "Missed call from : " + phoneNumber);
+                            shown = true;
+                        }
+
+                    }
+
+
                     ringing = false;
+
 
                     //Stop recording if it was on
                     if (recording == true) {
@@ -206,8 +236,8 @@ public class CallRecorderServiceAll extends Service {
 
                         //Generate notificaton only if shared preferences is true for notification
                         if (notificationMode.equals("true"))
-                            generateNotification();
-                        recorder.stop();
+                            // generateNotification();
+                            recorder.stop();
                         recorder.release();
                         recording = false;
 

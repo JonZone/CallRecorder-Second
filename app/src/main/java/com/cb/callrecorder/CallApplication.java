@@ -62,12 +62,12 @@ public class CallApplication extends Application {
 
 
             Intent all = new Intent(this, CallRecorderServiceAll.class);
-            Intent opt = new Intent(this, CallRecorderServiceOptional.class);
+            //  Intent opt = new Intent(this, CallRecorderServiceOptional.class);
             if (sp.getInt("type", 0) == 0) {
                 startService(all);
             } else if (sp.getInt("type", 0) == 1) {
                 stopService(all);
-                stopService(opt);
+                //  stopService(opt);
             }
 
         } catch (Exception e) {
@@ -90,39 +90,9 @@ public class CallApplication extends Application {
         tracker.enableAutoActivityTracking(true);
     }
 
-    public boolean isBannerVisible() {
-        SharedPreferences sharedpreferences = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        return sharedpreferences.getInt("share_count", 0) < 5;
-    }
 
-    /*public CallApplication() {
-        // TODO Auto-generated constructor stub
 
-        try{
 
-            Intent musicservice = new Intent(getApplicationContext(),MusicService.class);
-
-        startService(musicservice);
-        Intent all=new Intent(this,CallRecorderServiceAll.class);
-        Intent opt = new Intent(this,CallRecorderServiceOptional.class);
-        if(sp.getInt("type", 0)==0)
-        {
-            startService(all);
-        }
-        else if(sp.getInt("type", 0)==1)
-        {
-            stopService(all);
-            stopService(opt);
-        }
-        else if(sp.getInt("type", 0)==2)
-        {
-            startService(opt);
-        }
-        }catch(Exception e)
-        {
-            Log.e("application", "service");
-        }
-    }*/
     public static CallApplication getInstance() {
         return mApplication;
     }
@@ -135,16 +105,16 @@ public class CallApplication extends Application {
         try {
 
             Intent all = new Intent(this, CallRecorderServiceAll.class);
-            Intent opt = new Intent(this, CallRecorderServiceOptional.class);
+            // Intent opt = new Intent(this, CallRecorderServiceOptional.class);
             stopService(all);
-            stopService(opt);
+            // stopService(opt);
             if (sp.getInt("type", 0) == 0) {
                 startService(all);
             } else if (sp.getInt("type", 0) == 1) {
                 stopService(all);
-                stopService(opt);
+                //  stopService(opt);
             } else if (sp.getInt("type", 0) == 2) {
-                startService(opt);
+                //  startService(opt);
             }
         } catch (Exception e) {
             Log.e("application", "reset service");

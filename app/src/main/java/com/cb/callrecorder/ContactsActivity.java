@@ -243,28 +243,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     }
 
-    public void loadBanners() {
-        AdView mAdView = (AdView) findViewById(R.id.startAppBanner);
-        AdRequest adRequest1 = new AdRequest.Builder()
-                .build();
-        mAdView.loadAd(adRequest1);
-    }
 
-    public void loadInterstitial() {
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
 
-        mInterstitialAd.loadAd(adRequest);
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                }
-            }
-        });
-    }
+
 }
