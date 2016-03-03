@@ -128,9 +128,9 @@ public class CallRecorderServiceAll extends Service {
             sample.mkdirs();
 
             String fileName = String.valueOf(System.currentTimeMillis());
-
+            File audiofile;
             //  File audiofile = new File(sample.getAbsolutePath()+"/sound"+fileName+".amr");
-            File audiofile = new File(sample.getAbsolutePath() + "/sound" + fileName + ".3gp");
+            //  File audiofile = new File(sample.getAbsolutePath() + "/sound" + fileName + ".3gp");
 
 //            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION);
 //            recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
@@ -139,32 +139,32 @@ public class CallRecorderServiceAll extends Service {
 //            recorder.setAudioEncodingBitRate(16);
 //            recorder.setAudioSamplingRate(44100);
 
-//            if (Build.VERSION.SDK_INT ==Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//               // recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION);
-//                recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-//                Log.e("AudioSource", "VOICE_RECOGNITION");
-//            }
-//            else if (Build.VERSION.SDK_INT ==Build.VERSION_CODES.JELLY_BEAN) {
-//               // recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-//                recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-//                Log.e("AudioSource", "VOICE_MIC");}
-//            else {
-//                Log.e("AudioSource", "VOICE_CALL");
-//                //recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
-//                recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-//            }
-            recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-            recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                audiofile = new File(sample.getAbsolutePath() + "/sound" + fileName + ".3gp");
+                recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION);
+                recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                recorder.setOutputFile(audiofile.getAbsolutePath());
+                Log.e("AudioSource", "VOICE_RECOGNITION");
+            } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+                audiofile = new File(sample.getAbsolutePath() + "/sound" + fileName + ".amr");
+                recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+                recorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
+                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                recorder.setOutputFile(audiofile.getAbsolutePath());
+            } else {
+                Log.e("AudioSource", "VOICE_CALL");
+                audiofile = new File(sample.getAbsolutePath() + "/sound" + fileName + ".3gp");
+                recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+                recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                recorder.setOutputFile(audiofile.getAbsolutePath());
+            }
 
-
-            recorder.setOutputFile(audiofile.getAbsolutePath());
             recorder.prepare();
 
             AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-            //  get the current volume set
             int deviceCallVol = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-            //  set volume to maximum
             audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0);
             Log.e("recorder", "" + String.valueOf(recording));
 
