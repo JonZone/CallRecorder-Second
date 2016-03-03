@@ -111,11 +111,20 @@ public class CallRecorderServiceOptional extends Service{
         
         String fileName=String.valueOf(System.currentTimeMillis());
         
-        File audiofile = new File(sample.getAbsolutePath()+"/sound"+fileName+".amr");
+      //  File audiofile = new File(sample.getAbsolutePath()+"/sound"+fileName+".amr");
+        File audiofile = new File(sample.getAbsolutePath()+"/sound"+fileName+".3gp");
 
-        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+//        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
+//        recorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
+//        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+
+
+		recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+		recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+		recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+
         recorder.setOutputFile(audiofile.getAbsolutePath());
         recorder.prepare();
         

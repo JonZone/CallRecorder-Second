@@ -7,8 +7,5 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="banner_ad_unit_id">ca-app-pub-7962585961402786/8469397951</string>
-    <string name="interstitial_ad_unit_id">ca-app-pub-7962585961402786/9946131154</string>
-    <string name="facebook_app_id">890270317726259</string>
 
 </resources>

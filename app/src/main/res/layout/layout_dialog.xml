@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:text="All received and dialed calls will be recorded automatically."
             android:visibility="gone" />
-	
+
         <RadioButton
             android:id="@+id/radio1"
             android:layout_width="wrap_content"
@@ -35,18 +35,13 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:text="No call will be recorded. This option will make the app useless. Make sure that you want to choose this option." />
-	
-        <RadioButton
-            android:id="@+id/radio2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ask On Every Call" />
+
     </RadioGroup>
 
     <RelativeLayout
         android:id="@+id/ask_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:visibility="gone">
 
         <TextView
@@ -82,7 +77,7 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:layout_below="@+id/rl1">
 
             <ImageView
